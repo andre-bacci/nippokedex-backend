@@ -13,5 +13,6 @@ export default defineConfig([
     files: ["**/*.{js,mjs,cjs,ts}"],
     languageOptions: { globals: globals.node },
   },
+  { rules: { "@typescript-eslint/no-require-imports": "off" } },
   tseslint.configs.recommended,
 ]);

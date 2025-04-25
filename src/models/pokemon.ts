@@ -32,18 +32,17 @@ export const pokemonSchema = new Schema<IPokemon>(
       {
         language: { type: String, required: true },
         entry: {
-          type: [
-            {
-              name: { type: String, required: true },
-              genus: { type: String, required: true },
-              descriptions: [
-                {
-                  version: { type: String, required: true },
-                  flavor_text: { type: String, required: true },
-                },
-              ],
-            },
-          ],
+          type: {
+            name: { type: String, required: true },
+            genus: { type: String, required: true },
+            descriptions: [
+              {
+                version: { type: String, required: true },
+                flavor_text: { type: String, required: true },
+              },
+            ],
+          },
+
           required: true,
         },
       },

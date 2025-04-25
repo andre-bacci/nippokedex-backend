@@ -20,6 +20,8 @@ export interface IPokemon {
   }[];
   types: string[];
   sprite: URL;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export const pokemonSchema = new Schema<IPokemon>(
@@ -48,6 +50,8 @@ export const pokemonSchema = new Schema<IPokemon>(
     ],
     types: { type: [String], required: true },
     sprite: { type: String, required: true },
+    createdAt: Date,
+    updatedAt: Date,
   },
   { timestamps: true },
 );

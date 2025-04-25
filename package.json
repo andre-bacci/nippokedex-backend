@@ -8,11 +8,14 @@
     "@types/express": "^5.0.1",
     "eslint": "^9.25.1",
     "globals": "^16.0.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.0"
   },
   "scripts": {
     "start": "tsc && node dist/server.js",
+    "dev": "npx nodemon src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prettier": "npx prettier --write ."
   },

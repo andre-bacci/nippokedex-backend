@@ -19,7 +19,7 @@ pokemonRoutes.get('/:id', async (req, res) => {
       const pokemonSpeciesResponse = await service.getPokemonSpecies(id);
       pokemon = new Pokemon(createPokemon(pokemonResponse.data, pokemonSpeciesResponse.data));
       pokemon.save();
-      res.send(pokemon);
+      res.status(201).send(pokemon);
       return;
     } catch {
       res.status(404).send();

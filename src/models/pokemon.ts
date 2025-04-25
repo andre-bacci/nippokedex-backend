@@ -22,32 +22,35 @@ export interface IPokemon {
   sprite: URL;
 }
 
-export const pokemonSchema = new Schema<IPokemon>({
-  _id: { type: Number, required: true },
-  name: { type: String, required: true },
-  details: [
-    {
-      language: { type: String, required: true },
-      entry: {
-        type: [
-          {
-            name: { type: String, required: true },
-            genus: { type: String, required: true },
-            descriptions: [
-              {
-                version: { type: String, required: true },
-                flavor_text: { type: String, required: true },
-              },
-            ],
-          },
-        ],
-        required: true,
+export const pokemonSchema = new Schema<IPokemon>(
+  {
+    _id: { type: Number, required: true },
+    name: { type: String, required: true },
+    details: [
+      {
+        language: { type: String, required: true },
+        entry: {
+          type: [
+            {
+              name: { type: String, required: true },
+              genus: { type: String, required: true },
+              descriptions: [
+                {
+                  version: { type: String, required: true },
+                  flavor_text: { type: String, required: true },
+                },
+              ],
+            },
+          ],
+          required: true,
+        },
       },
-    },
-  ],
-  types: { type: [String], required: true },
-  sprite: { type: String, required: true },
-});
+    ],
+    types: { type: [String], required: true },
+    sprite: { type: String, required: true },
+  },
+  { timestamps: true },
+);
 
 const LANGUAGES = ['ja', 'ja-Hrkt', 'en'];
 

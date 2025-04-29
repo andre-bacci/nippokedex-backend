@@ -1,6 +1,4 @@
 import { Schema, model } from 'mongoose';
-import { PokemonDetailResponse } from '../services/response/pokemon';
-import { PokemonSpeciesDetailResponse } from '../services/response/pokemonSpecies';
 
 export interface PokemonDetailsByLanguage {
   name: string;
@@ -54,33 +52,5 @@ export const pokemonSchema = new Schema<IPokemon>(
   },
   { timestamps: true },
 );
-
-const LANGUAGES = ['ja', 'ja-Hrkt', 'en'];
-
-export function createPokemon(
-  pokemonResponse: PokemonDetailResponse,
-  pokemonSpeciesResponse: PokemonSpeciesDetailResponse,
-): IPokemon {
-  return {
-    _id: pokemonSpeciesResponse.id,
-    name: pokemonSpeciesResponse.name,
-    details: LANGUAGES.map((language) => {
-      return {
-        language: language,
-        entry: {
-          name: pokemonSpeciesResponse.names.find((name) => name.language.name === language)?.name,
-          genus: pokemonSpeciesResponse.genera.find((name) => name.language.name === language)?.genus,
-          descriptions: pokemonSpeciesResponse.flavor_text_entries
-            .filter((name) => name.language.name === language)
-            .map((entry) => {
-              return { version: entry.version.name, flavor_text: entry.flavor_text };
-            }),
-        },
-      };
-    }),
-    types: pokemonResponse.types.map((type) => type.type.name),
-    sprite: pokemonResponse.sprites.front_default,
-  };
-}
 
 export const Pokemon = model<IPokemon>('Pokemon', pokemonSchema, 'pokemon');

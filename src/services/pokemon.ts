@@ -1,11 +1,11 @@
 import { Document } from 'mongoose';
+import PokeApiClient from '../client/pokeApi';
+import { PokemonDetailResponse } from '../client/pokeApi/response/pokemon';
+import { PokemonSpeciesDetailResponse } from '../client/pokeApi/response/pokemonSpecies';
 import { IPokemon, Pokemon } from '../models/pokemon';
-import { PokeApiService } from './pokeApi';
-import { PokemonDetailResponse } from './response/pokemon';
-import { PokemonSpeciesDetailResponse } from './response/pokemonSpecies';
 
 export class PokemonService {
-  pokeApi = new PokeApiService();
+  pokeApi = new PokeApiClient();
 
   LANGUAGES = ['ja', 'ja-Hrkt', 'en'];
 

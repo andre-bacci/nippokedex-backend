@@ -5,7 +5,7 @@ import { PokemonSpeciesDetailResponse } from './response/pokemonSpecies';
 import { VersionDetailResponse } from './response/version';
 import { VersionGroupDetailResponse } from './response/versionGroup';
 
-export class PokeApiService {
+export default class PokeApiClient {
   private baseUrl = 'https://pokeapi.co/api/v2';
 
   getPokemonSpecies(query: string | number): Promise<AxiosResponse<PokemonSpeciesDetailResponse, unknown>> {

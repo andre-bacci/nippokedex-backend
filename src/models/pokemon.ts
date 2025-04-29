@@ -83,4 +83,4 @@ export function createPokemon(
   };
 }
 
-export const Pokemon = model('Pokemon', pokemonSchema, 'pokemon');
+export const Pokemon = model<IPokemon>('Pokemon', pokemonSchema, 'pokemon');

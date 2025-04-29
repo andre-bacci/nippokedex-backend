@@ -8,7 +8,6 @@ import { VersionGroupDetailResponse } from './response/versionGroup';
 export class PokeApiService {
   private baseUrl = 'https://pokeapi.co/api/v2';
 
-  // create a method that read API URL using GET method
   getPokemonSpecies(query: string | number): Promise<AxiosResponse<PokemonSpeciesDetailResponse, unknown>> {
     const url = `${this.baseUrl}/pokemon-species/${query}`;
 

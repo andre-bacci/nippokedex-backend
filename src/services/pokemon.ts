@@ -1,5 +1,6 @@
 import { Document } from 'mongoose';
 import PokeApiClient from '../client/pokeApi';
+import { PokedexResponse } from '../client/pokeApi/response/pokedex';
 import { PokemonDetailResponse } from '../client/pokeApi/response/pokemon';
 import { PokemonSpeciesDetailResponse } from '../client/pokeApi/response/pokemonSpecies';
 import { IPokemon, Pokemon } from '../models/pokemon';
@@ -8,6 +9,7 @@ export class PokemonService {
   pokeApi = new PokeApiClient();
 
   LANGUAGES = ['ja', 'ja-Hrkt', 'en'];
+  DEFAULT_LANGUAGE = 'en';
 
   createPokemon = async (
     pokemonResponse: PokemonDetailResponse,
@@ -53,8 +55,7 @@ export class PokemonService {
     return pokemon;
   };
 
-  findPokedexIndexByVersion = async (id: string, version: string) => {
-    const pokemon = await this.findPokemonByQuery(id);
+  findVersionGroup = async (version: string) => {
     const versionResponse = await this.pokeApi.getVersion(version);
     const versionGroup = versionResponse.data.version_group;
 
@@ -62,22 +63,33 @@ export class PokemonService {
       //throw error
     }
 
-    const versionGroupResponse = await this.pokeApi.getVersionGroup(versionGroup.name);
+    return await this.pokeApi.getVersionGroup(versionGroup.name);
+  };
+
+  findPokedexNameAndIndex = async (pokemonName: string, pokedex: PokedexResponse) => {
+    const pokedexResponse = await this.pokeApi.getPokedex(pokedex.name);
+    const currentPokemonEntry = pokedexResponse.data.pokemon_entries.find(
+      (entry) => entry.pokemon_species.name === pokemonName,
+    );
+    if (currentPokemonEntry) {
+      const name = pokedexResponse.data.names.find((name) => name.language.name === this.DEFAULT_LANGUAGE)?.name;
+      const index = currentPokemonEntry.entry_number;
+      const data = { pokedex_name: name, index: index };
+      return data;
+    }
+    return null;
+  };
+
+  findPokedexIndexByVersion = async (id: string, version: string) => {
+    const pokemon = await this.findPokemonByQuery(id);
+    const versionGroupResponse = await this.findVersionGroup(version);
     const pokedexes = versionGroupResponse.data.pokedexes;
     for (const pokedex of pokedexes) {
       // assumes default pokedex for version group is the first of array
-      const pokedexResponse = await this.pokeApi.getPokedex(pokedex.name);
-      const currentPokemonEntry = pokedexResponse.data.pokemon_entries.find(
-        (entry) => entry.pokemon_species.name === pokemon.name,
-      );
-      if (currentPokemonEntry) {
-        const name = pokedexResponse.data.names.find((name) => name.language.name === 'en')?.name;
-        const index = currentPokemonEntry.entry_number;
-        const data = { pokedex_name: name, index: index, version: version };
-        return data;
-      }
+      const data = this.findPokedexNameAndIndex(pokemon.name, pokedex);
+      if (data) return data;
     }
-    const data = { pokedex_name: 'National', index: id, version: version };
+    const data = { pokedex_name: 'National', index: id };
     return data;
   };
 }
